@@ -2,7 +2,7 @@ import { createContext, useReducer, useState } from 'react';
 import React from 'react';
 import { authReducer } from "./AuthReducer";
 import { User } from "../interfaces/User";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { dbInstance } from "../utils/Firebase";
 import { setDoc, doc } from 'firebase/firestore';
 
@@ -33,6 +33,20 @@ export const AuthProvider = ({ children }: any) => {
             return true;
         } catch (error) {
             console.error("Error signing in:", error);
+            return false;
+        }
+    }
+    const googleLogin = async (googleToken: string) => {
+        try {
+            const credential = GoogleAuthProvider.credential(googleToken);
+            const userCredential = await signInWithCredential(auth, credential);        
+            const user = userCredential.user;            
+            //setCurrentUser(user);
+            
+            console.log("Google login successful");
+            return true;
+        } catch (error) {
+            console.error("Error signing in with Google:", error);
             return false;
         }
     }
@@ -67,7 +81,8 @@ export const AuthProvider = ({ children }: any) => {
                 onChange,
                 login,
                 signUp,
-                currentUser
+                currentUser,
+                googleLogin
             }}
         >
             {children}

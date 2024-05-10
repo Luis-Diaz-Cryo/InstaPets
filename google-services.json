@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1071715437991",
+    "project_id": "instapets-fdc6a",
+    "storage_bucket": "instapets-fdc6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071715437991:android:4134f2717abe73ffb1fa82",
+        "android_client_info": {
+          "package_name": "com.cyldecryo.instaPets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071715437991-ms2st40tnnqfub8m5282buka7un0sse5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cyldecryo.instaPets",
+            "certificate_hash": "5d67645cb3c0d35f2a730f0c985e98332402939c"
+          }
+        },
+        {
+          "client_id": "1071715437991-hoisisesstpma921lolbsv4thlf1mtng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBthjkHkwCEQ_LlGPaJCw9WI9ZkgRFqwKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1071715437991-hoisisesstpma921lolbsv4thlf1mtng.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

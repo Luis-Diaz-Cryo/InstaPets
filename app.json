@@ -21,10 +21,20 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.cyldecryo.instaPets",
+      "googleServicesFile":"./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "60fcafe7-e830-4c81-ab65-5beb8d68df9d"
+      }
+    },
+    "plugins":[
+      "@react-native-google-signin/google-signin"
+    ]
   }
 }

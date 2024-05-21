@@ -22,8 +22,14 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+     
       "package": "com.cyldecryo.instaPets",
-      "googleServicesFile":"./google-services.json"
+      "googleServicesFile":"./google-services.json",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDHPmhlX_5NGqtcU533Mg8azraa9vMZe_c"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -33,6 +39,8 @@
         "projectId": "60fcafe7-e830-4c81-ab65-5beb8d68df9d"
       }
     },
+    
+    
     "plugins":[
       "@react-native-google-signin/google-signin"
     ]

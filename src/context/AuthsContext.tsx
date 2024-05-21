@@ -1,10 +1,14 @@
-import { createContext, useReducer, useState } from 'react';
+import { createContext, useEffect, useReducer, useState } from 'react';
 import React from 'react';
 import { authReducer } from "./AuthReducer";
 import { User } from "../interfaces/User";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { dbInstance } from "../utils/Firebase";
-import { setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc, collection, getDocs, where, query } from 'firebase/firestore';
+import { GeminiResponseData } from '../interfaces/appInterace';
+import axios, { AxiosResponse } from "axios";
+import { Message } from '../interfaces/message';
+import { Vetenarian } from '../interfaces/Veterenarian';
 
 export interface AuthState {
     email: string,
@@ -15,11 +19,25 @@ const initialState = { email: "bobs@urhouse.com", password: "" }
 
 export const AuthContext = createContext({} as any)
 
+const API_URL: string = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+const API_KEY: string =  'AIzaSyC0iijSdvIhOhGbdGCSVG6o4DxmFX2LRic';
+
+
 export const AuthProvider = ({ children }: any) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [vetchatHistory, setVetChatHistory] = useState([] as Message[]); 
 
     const auth = getAuth();
+
+    useEffect(()=>{
+        if(currentUser == null) return;
+        console.log({
+            currentUser
+        });
+        getCurrentVetHistory(currentUser.email)
+
+    },[currentUser])
 
     const onChange = (email: string, password: string) => {
         dispatch({ type: "onChange", payload: { email, password } })
@@ -29,7 +47,9 @@ export const AuthProvider = ({ children }: any) => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            //console.log("Current User:", user);
+            console.log("Current User:", user);
+            getCurrentUser(email)
+            getCurrentVetHistory(email)
             return true;
         } catch (error) {
             console.error("Error signing in:", error);
@@ -40,8 +60,10 @@ export const AuthProvider = ({ children }: any) => {
         try {
             const credential = GoogleAuthProvider.credential(googleToken);
             const userCredential = await signInWithCredential(auth, credential);        
-            const user = userCredential.user;            
-            //setCurrentUser(user);
+            const user = userCredential.user; 
+            await addUserDataToFirestore(user.displayName, user.email,user.photoURL);
+            getCurrentUser(user.email)
+            getCurrentVetHistory(user.email)
             
             console.log("Google login successful");
             return true;
@@ -55,7 +77,7 @@ export const AuthProvider = ({ children }: any) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            await addUserDataToFirestore(username, email);
+            await addUserDataToFirestore(username, email,"no photo");
             return true;
         } catch (error) {
             console.error("Error signing up:", error);
@@ -63,16 +85,123 @@ export const AuthProvider = ({ children }: any) => {
         }
     }
 
-    const addUserDataToFirestore = async (username: string, email: string) => {
+    const getCurrentUser = async (email: string) => {
+        try {
+            const userCollection = collection(dbInstance, "users");
+            const q = query(userCollection, where("email", "==", email));
+            const snapshot = await getDocs(q);
+    
+            if (snapshot.empty) {
+                console.log("No matching documents.");
+                return null;
+            }
+    
+            let user = null;
+            snapshot.forEach(doc => {
+                user = { id: doc.id, ...doc.data() };
+
+            });
+    
+            setCurrentUser(user);
+            console.log("this the current user", user)
+        } catch (error) {
+            console.error("Error getting documents: ", error);
+            return null;
+        }
+    }
+
+    const addUserDataToFirestore = async (username: string, email: string,photoURL:string) => {
         try {
             await setDoc(doc(dbInstance, "users", email), {
                 username: username,
-                email: email
+                email: email,
+                photoURL: photoURL
             });
         } catch (error) {
             console.error("Error adding user data to Firestore:", error);
         }
     }
+
+    async function chatWithGemini(userMessage: string, currentVet:Vetenarian): Promise<string> {
+        try {
+            const response: AxiosResponse<GeminiResponseData> = await axios.post(
+                `${API_URL}?key=${API_KEY}`,
+                {
+                    contents: [
+                        {
+                            parts: [
+                                {
+                                    text: `name: ${currentVet.name}, Last Name: ${currentVet.lastName}, Email: ${currentVet.email} these are your info act as if u were them[you dont need to list them all unless asked too also dont introduce yourself until u are asked too dont reintroduce your self every message]  `+userMessage,
+                                },
+                            ],
+                        },
+                    ],
+                    
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            const responseData: GeminiResponseData = response.data;
+            const responseText: string = responseData.candidates[0]?.content?.parts[0]?.text || '';
+            
+            const updatedChatHistory = [
+                ...vetchatHistory,
+                { text: userMessage, isUser: true },
+                { text: responseText, isUser: false },
+            ];
+
+            setVetChatHistory(updatedChatHistory);
+            addVetDataToFirestore(currentUser.email,updatedChatHistory)
+        
+            return responseText;
+        } catch (error) {
+            console.error('Error:');
+            throw error;
+        }
+    }
+
+    const addVetDataToFirestore = async ( email: string, chatHistory:Message[]) => {
+        try {
+            await setDoc(doc(dbInstance, "VetsChats", email), {
+                email: email,
+                vetChats:chatHistory
+            });
+        } catch (error) {
+            console.error("Error adding Vet data to Firestore:", error);
+        }
+    }
+
+    const getCurrentVetHistory = async (email: string) => {
+        try {
+            const userCollection = collection(dbInstance, "VetsChats");
+            const q = query(userCollection, where("email", "==", email));
+            const snapshot = await getDocs(q);
+    
+            if (snapshot.empty) {
+                console.log("No matching documents.");
+                setVetChatHistory([]);
+                return null;
+            }
+    
+            let chatHistory = [];
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                chatHistory = data.vetChats || [];
+            });
+    
+            setVetChatHistory(chatHistory);
+            console.log("Current vet chat history:", chatHistory);
+            return chatHistory;
+        } catch (error) {
+            console.error("Error getting veterinarian chat history: ", error);
+            return null;
+        }
+    }
+
 
     return (
         <AuthContext.Provider
@@ -82,7 +211,9 @@ export const AuthProvider = ({ children }: any) => {
                 login,
                 signUp,
                 currentUser,
-                googleLogin
+                googleLogin,
+                chatWithGemini,
+                vetchatHistory,
             }}
         >
             {children}

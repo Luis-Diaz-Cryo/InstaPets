@@ -8,6 +8,7 @@ import SignUpScreen from "../views/SignUp";
 import BottomTabNav from './BottomTabNav'; // Import BottomTabNav
 import MapScreen from "../views/MapScreen";
 import VeterenarianScreen from "../views/VetenarianScreen";
+import ChatWindow from "../views/ChatWindow";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,7 @@ export default function AppNavigation() {
                     <Stack.Screen name="Home" component={BottomTabNav} /> 
                     <Stack.Screen name="map" component={MapScreen} />
                     <Stack.Screen name="Vet" component={VeterenarianScreen} />
+                    <Stack.Screen name="chat" component={ChatWindow}/>
 
                 </Stack.Navigator>
             </AuthProvider>

@@ -1,3 +1,4 @@
+import { Contact } from "./Contact"
 import { Message } from "./message"
 
 export interface User{
@@ -5,4 +6,5 @@ export interface User{
     email:string,
     password:string
     VetMessages:Message[]
+    contacts:Contact[]
 }

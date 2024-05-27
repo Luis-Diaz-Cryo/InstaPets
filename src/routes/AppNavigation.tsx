@@ -5,9 +5,12 @@ import { AuthProvider } from "../context/AuthsContext";
 import StartScreen from "../views/StartScreen";
 import LoginScreen from "../views/LoginScreen";
 import SignUpScreen from "../views/SignUp";
-import BottomTabNav from './BottomTabNav'; // Import BottomTabNav
+import BottomTabNav from './BottomTabNav'; 
 import MapScreen from "../views/MapScreen";
 import VeterenarianScreen from "../views/VetenarianScreen";
+import ChatWindow from "../views/ChatWindow";
+import ChatHeader from "../components/ChatHeader";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +30,7 @@ export default function AppNavigation() {
                     <Stack.Screen name="Home" component={BottomTabNav} /> 
                     <Stack.Screen name="map" component={MapScreen} />
                     <Stack.Screen name="Vet" component={VeterenarianScreen} />
-
+                    <Stack.Screen name="chat" component={ChatWindow}/>
                 </Stack.Navigator>
             </AuthProvider>
         </NavigationContainer>

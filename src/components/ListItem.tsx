@@ -6,23 +6,25 @@ import Avatar from './Avatar'
 import { Entypo } from '@expo/vector-icons';
 import { AuthContext } from '../context/AuthsContext'
 
-export default function ListItem({ type, description, user, style, time, room, image, navigation }: any) {
-    const {selectContact} = useContext(AuthContext)
+export default function ListItem({ type, description, userb,user, style, time, room, image, navigation }: any) {
+    const {selectContact, getCurrentRoom} = useContext(AuthContext)
   return (
     <View style={{ height: 80 }} >
       <Grid style={{ maxHeight: 80 }}>
         <Col style={{ width: 80, alignItems: 'center', justifyContent: "center" }}>
-          <Avatar user={user} size={type === 'contacts' ? 40 : 65}/>
+          <Avatar user={userb} size={type === 'contacts' ? 40 : 65}/>
         </Col>
         <Col style={{ marginLeft: 10 }}>
           <Row style={{ alignItems: 'center' }}>
             <Col>
-              <Text>{user.contactName}</Text> 
+              <Text>{userb.contactName}</Text> 
             </Col>
             <Col style={{ alignItems: 'flex-end', paddingRight: 10 }}>
               <TouchableOpacity onPress={() => {
                 navigation.navigate("chat")
-                selectContact(user)
+                selectContact(userb)
+                getCurrentRoom(user.email,userb.email)
+
 
               }}>
                 <Entypo name="message" size={24} color="black" />

@@ -27,6 +27,9 @@ export const AuthProvider = ({ children }: any) => {
     const [vetchatHistory, setVetChatHistory] = useState([] as Message[]);
     const [contacts, setContacts] = useState<Contact[]>([]);
     const [currentContact, setCurrentContact] = useState<Contact | null>(null);
+    const [rooms, setRooms]=useState([])
+    const [currentRoom, setCurrentRoom] = useState({})
+   
     const selectContact = (contact: Contact) => {
         setCurrentContact(contact);
     }
@@ -249,6 +252,61 @@ export const AuthProvider = ({ children }: any) => {
             console.error("Error getting user contacts:", error);
         }
     };
+
+    const getRooms = async (email: string) => {
+        try {
+            const roomCollection = collection(dbInstance, "rooms");
+            const q = query(roomCollection, where("participantsArray", "array-contains", email));
+            const snapshot = await getDocs(q);
+
+            if (snapshot.empty) {
+                console.log("No rooms found.");
+                setRooms([]);
+                return;
+            }
+
+            const roomList = [];
+            snapshot.forEach(doc => {
+                roomList.push({ id: doc.id, ...doc.data() });
+            });
+
+            setRooms(roomList);
+            console.log("Fetched rooms:", roomList);
+        } catch (error) {
+            console.error("Error getting rooms:", error);
+        }
+    };
+
+    const getCurrentRoom = async (currentUserEmail:string, contactEmail:string ) => {
+        try {
+            const roomCollection = collection(dbInstance, "rooms");
+            const q = query(roomCollection, where("participantsArray", "array-contains", currentUserEmail));
+            const snapshot = await getDocs(q);
+    
+            if (snapshot.empty) {
+                console.log("No current room found.");
+                return null;
+            }
+    
+            let currentRoom = null;
+            snapshot.forEach(doc => {
+                const roomData = doc.data();
+                if (roomData.participantsArray.includes(contactEmail)) {
+                    currentRoom = { id: doc.id, ...roomData };
+                }
+                
+            });
+    
+            console.log("Current room:", currentRoom);
+            console.log("room id",currentRoom.id)
+            setCurrentRoom(currentRoom)
+            return currentRoom;
+        } catch (error) {
+            console.error("Error getting current room:", error);
+            return null;
+        }
+    };
+    
     
 
     return (
@@ -267,8 +325,11 @@ export const AuthProvider = ({ children }: any) => {
                 getUserContacts,
                 currentContact,
                 selectContact,
-                rooms: [],
-                setRooms: () => { },
+                rooms,
+                getRooms,
+                getCurrentRoom,
+                currentRoom
+                
             }}
         >
             {children}

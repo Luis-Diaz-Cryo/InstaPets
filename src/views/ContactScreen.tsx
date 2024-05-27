@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthsContext';
 import ListItem  from '../components/ListItem'; 
 
 export default function ContactScreen({ navigation }: any) {
-    const { currentUser, contacts, addContact, getUserContacts } = useContext(AuthContext);
+    const { currentUser, contacts, addContact, getUserContacts, getRooms,rooms, getCurrentRoom} = useContext(AuthContext);
     const [contactEmail, setContactEmail] = useState('');
     const [contactName, setContactName] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -13,6 +13,9 @@ export default function ContactScreen({ navigation }: any) {
     useEffect(() => {
         if (currentUser && currentUser.email) {
             getUserContacts(currentUser.email);
+            getRooms(currentUser.email)
+            console.log("theres are the rooms",rooms)
+
         }
     }, [currentUser]);
 
@@ -38,15 +41,17 @@ export default function ContactScreen({ navigation }: any) {
     return (
         <View style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1, padding: 5, paddingRight: 10 }}>
-                <Text>Welcome to the Contacts!</Text>
                 <ScrollView>
                     {contacts && contacts.length > 0 ? (
                         contacts.map((contact, index) => (
                             <ListItem
                                 key={index}
                                 type="contacts"
-                                user={contact}
+                                user={currentUser}
+                                userb={contact}
                                 navigation={navigation}
+                                
+                    
                             />
                         ))
                     ) : (

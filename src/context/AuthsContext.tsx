@@ -26,7 +26,10 @@ export const AuthProvider = ({ children }: any) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [vetchatHistory, setVetChatHistory] = useState([] as Message[]);
     const [contacts, setContacts] = useState<Contact[]>([]);
-
+    const [currentContact, setCurrentContact] = useState<Contact | null>(null);
+    const selectContact = (contact: Contact) => {
+        setCurrentContact(contact);
+    }
     const auth = getAuth();
 
     useEffect(() => {
@@ -262,6 +265,8 @@ export const AuthProvider = ({ children }: any) => {
                 contacts,
                 addContact,
                 getUserContacts,
+                currentContact,
+                selectContact,
                 rooms: [],
                 setRooms: () => { },
             }}

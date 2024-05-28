@@ -5,6 +5,7 @@ import ProfileScreen from '../views/ProfileScreen';
 import MapScreen from '../views/MapScreen';
 import ContactScreen from '../views/ContactScreen';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import CameraScreen from '../views/CameraScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -16,7 +17,7 @@ const BottomTabNav = () => {
                 tabBarIcon: ({ color, size }) => {
                     let iconName;
 
-                    switch(route.name){
+                    switch (route.name) {
                         case 'Home':
                             iconName = 'home';
                             break;
@@ -29,20 +30,25 @@ const BottomTabNav = () => {
                         case 'Profile':
                             iconName = 'account';
                             break;
+                        case 'Camera':
+                            iconName = 'camera';
+                            break;
                         default:
 
                             break;
-                    }  
-                                    
+                    }
+
                     return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
                 },
             })}
-            
+
         >
             <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Camera" component={CameraScreen} />
             <Tab.Screen name="Contact" component={ContactScreen} />
             <Tab.Screen name="Map" component={MapScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
+
         </Tab.Navigator>
     );
 };

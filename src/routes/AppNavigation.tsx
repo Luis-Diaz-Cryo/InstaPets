@@ -10,6 +10,8 @@ import MapScreen from "../views/MapScreen";
 import VeterenarianScreen from "../views/VetenarianScreen";
 import ChatWindow from "../views/ChatWindow";
 import ChatHeader from "../components/ChatHeader";
+import QRCodeScreen from "../views/QRCodeScreen";
+import PetNameGeneratorScreen from "../views/PetNameGeneratorScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -31,6 +33,8 @@ export default function AppNavigation() {
                     <Stack.Screen name="map" component={MapScreen} />
                     <Stack.Screen name="Vet" component={VeterenarianScreen} />
                     <Stack.Screen name="chat" component={ChatWindow}/>
+                    <Stack.Screen name="QRCode" component={QRCodeScreen}/>
+                    <Stack.Screen name="Generator" component={PetNameGeneratorScreen}/>
                 </Stack.Navigator>
             </AuthProvider>
         </NavigationContainer>

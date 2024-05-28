@@ -1,47 +1,37 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import Avatar from "../components/Avatar";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthsContext";
 
-export default function ProfileScreen({ navigation }: any) {
-    const { currentUser } = useContext(AuthContext)
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import Avatar from '../components/Avatar';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthsContext';
+import CustomModal from '../components/CustomModal'; 
+
+export default function ProfileScreen({ navigation }) {
+    const { currentUser } = useContext(AuthContext);
+    const [modalVisible, setModalVisible] = useState(false); 
+
+    const handleLogout = () => {
+        navigation.navigate('StartScreen');
+    };
+
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Avatar user={currentUser} size={90} />
-            <Text>{currentUser.username}</Text>
-            <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('StartScreen')}>
-                <Text style={styles.buttonText}>Logout</Text>
-            </TouchableOpacity>
-
+        <View style={{ flex: 1 }}>
+            <View style={{ alignItems: 'flex-end', padding: 10 }}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                    <Image source={require('../assets/logoInsta.png')} style={{ width: 30, height: 30 }} />
+                </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Avatar user={currentUser} size={90} />
+                <Text>{currentUser.username}</Text>
+            </View>
+            <CustomModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                onLogout={handleLogout}
+                onQRCode={() => navigation.navigate('QRCode')}
+                onGenerator={() => navigation.navigate('Generator')}
+            />
         </View>
-    )
+    );
 }
-
-const styles = StyleSheet.create({
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-    button: {
-        padding: 10,
-        marginVertical: 5,
-        backgroundColor: '#3498db',
-        borderRadius: 5,
-        width: 200,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-});
-
-

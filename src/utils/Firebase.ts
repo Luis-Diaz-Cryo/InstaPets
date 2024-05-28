@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBzcUtXWej_TFg4lVt6bO1xUu3A4OOIP2w",
@@ -17,4 +18,5 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const dbInstance = getFirestore(app);
+export const storage = getStorage(app)
 

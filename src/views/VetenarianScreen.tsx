@@ -6,6 +6,7 @@ import { AuthContext } from '../context/AuthsContext';
 import { Message } from "../interfaces/message";
 import { User } from "../interfaces/User";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function VetenarianScreen({ navigation }: any) {
 
@@ -17,7 +18,6 @@ export default function VetenarianScreen({ navigation }: any) {
     } as User)
 
     const [message, setMessage] = useState('');
-    // const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const { chatWithGemini, currentUser, vetchatHistory } = useContext(AuthContext)
 
@@ -49,7 +49,7 @@ export default function VetenarianScreen({ navigation }: any) {
         <View style={styles.chatWindowncontainer}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <MaterialCommunityIcons name="arrow-left" size={24} color="white" />
+                    <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
                 </TouchableOpacity>
                 <Text style={styles.headerText}>Vet</Text>
             </View>
@@ -69,14 +69,18 @@ export default function VetenarianScreen({ navigation }: any) {
                 ))}
                 {isLoading && <Text style={styles.loadingText}>Loading...</Text>}
             </ScrollView>
-            <TextInput
-                style={styles.Chatinput}
-                value={message}
-                onChangeText={setMessage}
-                placeholder="Type a message"
-                multiline
-            />
-            <Button title="Send" onPress={handleSend} />
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.Chatinput}
+                    value={message}
+                    onChangeText={setMessage}
+                    placeholder="Type a message"
+                    multiline
+                />
+                <TouchableOpacity onPress={handleSend}>
+                    <MaterialIcons name="forward-to-inbox" size={24} color="black" />                
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };

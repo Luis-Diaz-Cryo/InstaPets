@@ -45,13 +45,13 @@ export default StyleSheet.create({
     signUpButton: {
         backgroundColor: '#221944'
     },
-    logoContainer:{
+    logoContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: "#301E5F" 
     },
-    logo:{
+    logo: {
         width: windowWidth, 
         height: windowHeight,
         resizeMode: 'contain', 
@@ -87,98 +87,104 @@ export default StyleSheet.create({
         fontWeight: 'bold'
     },
     chatWindowncontainer: {
-        backgroundColor: '#301E5F',
+        backgroundColor: 'white',
         flex: 1,
         padding: 20,
-      },
-      messagesList: {
+    },
+    messagesList: {
         flex: 1,
         marginBottom: 10,
-      },
-      message: {
+    },
+    message: {
         padding: 10,
         borderRadius: 5,
         marginBottom: 5,
-      },
-      userMessage: {
-        backgroundColor: '#e0e0e0',
+    },
+    userMessage: {
+        backgroundColor: '#ECE1C3',
         alignSelf: 'flex-end',
-      },
-      geminiMessage: {
-        backgroundColor: '#007bff',
+    },
+    geminiMessage: {
+        backgroundColor: '#8EBDB6',
         color: '#fff',
         alignSelf: 'flex-start',
-      },
-      Chatinput: {
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         borderWidth: 1,
         borderColor: 'gray',
-        padding: 10,
-        marginBottom: 10,
-        maxHeight: 150,
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
         backgroundColor: 'white',
-      },
-      header: {
+    },
+    Chatinput: {
+        flex: 1,
+        padding: 10,
+        fontSize: 16,
+        maxHeight: 150,
+        borderRadius: 10,
+    },
+    header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
         paddingHorizontal: 10,
-        paddingVertical: 5,
+        paddingVertical: 15,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
-      },
-      headerText: {
+    },
+    headerText: {
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold',
-      },
-      loadingText:{
-        color:"white"
-      },
-      homeContainer: {
+    },
+    loadingText: {
+        color: "white"
+    },
+    homeContainer: {
         flex: 1,
         backgroundColor: '#301E5F',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         padding: 20,
-      },
-      homeTitle: {
+    },
+    homeTitle: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#D1C9DB',
         marginBottom: 10,
-      },
-      homeSubtitle: {
+    },
+    homeSubtitle: {
         fontSize: 16,
         color: '#D1C9DB',
         textAlign: 'center',
         marginBottom: 20,
-      },
-      contactCard: {
+    },
+    contactCard: {
         backgroundColor: '#fff',
         padding: 15,
         marginBottom: 10,
         borderRadius: 10,
         width: '100%',
-      },
-      
-      contactsContainer: {
-     
+    },
+    contactsContainer: {
         borderRadius: 10,
         padding: 10,
         width: '100%',
-      },
-      
-      contactName: {
+    },
+    contactName: {
         color: '#301E5F',
         fontSize: 18,
         fontWeight: 'bold',
-      },
-      recentMessage: {
+    },
+    recentMessage: {
         fontSize: 14,
         color: 'gray',
         marginTop: 5,
-      },
-      bottomBar: {
+    },
+    bottomBar: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -189,10 +195,8 @@ export default StyleSheet.create({
         position: 'absolute',
         bottom: 0,
     },
-    
     bottomBarButton: {
         flex: 1,
         alignItems: 'center',
     },
 });
-

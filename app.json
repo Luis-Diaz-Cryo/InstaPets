@@ -4,10 +4,10 @@
     "slug": "instaPets",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/instaPetsLogo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/instaPetsLogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
